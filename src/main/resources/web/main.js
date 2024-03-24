@@ -59,15 +59,14 @@ const recordFormData = {
             try {
                 const response = await fetch('/rule-manage/api/rules', {
                     method: 'POST',
-                    body: JSON.stringify(rule)
+                    body: JSON.stringify(recordData)
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                console.log("Record created / updated:", rule);
-                await this.loadRecords();
+                console.log("Record created / updated:", recordData);
             } catch (error) {
-                console.error(JSON.stringify(error));
+                console.error(error);
                 return;
             }
             this.toggleEditForm();

@@ -6,7 +6,7 @@ import io.vertx.core.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Main {
+public class ExampleApp {
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(TestHttpServerVerticle.class, new DeploymentOptions().setConfig(new JsonObject().put("port", 7070)));

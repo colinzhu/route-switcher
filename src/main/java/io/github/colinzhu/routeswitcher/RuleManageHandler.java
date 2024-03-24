@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class RuleManageHandler {
+class RuleManageHandler {
     private final Vertx vertx;
     private final RuleManager ruleManager;
 
@@ -37,10 +37,7 @@ public class RuleManageHandler {
 
         try {
             Rule rule = routingContext.body().asPojo(Rule.class);
-
             ruleManager.addOrUpdate(rule);
-            ruleManager.persistRules();
-
             routingContext.json(ruleManager.getRules());
         } catch (Exception e) {
             routingContext.response().setStatusCode(500).end(Json.encode(Map.of("reason", e.getMessage())));
@@ -52,10 +49,7 @@ public class RuleManageHandler {
 
         try {
             Rule rule = routingContext.body().asPojo(Rule.class);
-
-            ruleManager.deleteRule(rule);
-            ruleManager.persistRules();
-
+            ruleManager.delete(rule);
             routingContext.json(ruleManager.getRules());
         } catch (Exception e) {
             routingContext.response().setStatusCode(500).end(Json.encode(Map.of("reason", e.getMessage())));

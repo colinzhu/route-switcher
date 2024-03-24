@@ -15,8 +15,7 @@ public class RouteSwitcherForwardVerticle extends AbstractVerticle {
     private HttpProxy httpsProxy;
 
     private final Map<String, String> rules = Map.of(
-            "local", "http://localhost:7070",
-            "zephy", "https://zephy.tech"
+            "local", "http://localhost:7070"
     );
     @Override
     public void start() {

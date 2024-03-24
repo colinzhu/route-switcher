@@ -22,18 +22,21 @@
 </head>
 
 <body>
-<div class="container-fluid">
+<div class="container-fluid" x-data="{}">
     <nav>
         <ul>
             <li>
                 <h1>Route Switcher</h1>
             </li>
         </ul>
+        <ul>
+            <li><button role="button" @click="$dispatch('addrecord')">Add</button></li>
+        </ul>
     </nav>
 </div>
 
 <!-- list of records -->
-<div class="overflow-auto" x-data="recordListData" x-init="loadRecords">
+<div class="overflow-auto" x-data="recordListData" x-init="loadRecords" @recordupdated.document="loadRecords">
     <table class="striped">
         <thead>
         <tr>
@@ -45,8 +48,8 @@
         <tbody>
         <template x-for="item in records">
             <tr>
-                <td x-text="item.uriPrefix"></td>
-                <td x-text="item.target"></td>
+                <td x-text="'/' + item.uriPrefix"></td>
+                <td x-html="'<mark>' + item.target + '</mark>' + '/' + item.uriPrefix"></td>
                 <td class="no-underline">
                     <a href="#" @click.prevent="$dispatch('updaterecord', { uriPrefix: item.uriPrefix, target: item.target })">📝</a>
                     <a href="#" @click.prevent="deleteRecord(item.uriPrefix, item.target)">❎</a>
@@ -63,13 +66,11 @@
         @updaterecord.document="loadItemToUpdate($event.detail)">
     <article x-transition>
         <header>
-            <h3 x-text="editMode == 'create' ? 'Create New' : 'Update'"></h3>
+            <h3>Add / Update</h3>
         </header>
         <form method="post" @submit.prevent="submit" id="recordEditForm">
-            <div class="grid3">
-                <label>uriPrefix<input type="text" x-model="uriPrefix" required x-bind:disabled="isSubmitting" /></label>
-                <label>target<input type="text" x-model="target" x-bind:disabled="isSubmitting" /></label>
-            </div>
+            <label>uriPrefix<input type="text" x-model="uriPrefix" required x-bind:disabled="isSubmitting" /></label>
+            <label>target<input type="text" x-model="target" x-bind:disabled="isSubmitting" size="100" /></label>
             <button x-bind:disabled="isSubmitting" x-bind:aria-busy="isSubmitting">Submit</button>
             <button x-bind:disabled="isSubmitting" @click="cancel" type="reset">Cancel</button>
         </form>

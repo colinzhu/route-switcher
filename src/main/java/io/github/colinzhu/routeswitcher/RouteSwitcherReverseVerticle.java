@@ -26,7 +26,6 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
     @Override
     public void start() {
         int port = config().getInteger("port");
-        ruleManager.loadRules();
         httpProxy = prepareHttpProxy(false);
         httpsProxy = prepareHttpProxy(true);
         defaultRequestHandler = prepareDefaultRequestHandler();
@@ -34,7 +33,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
         vertx.createHttpServer(new HttpServerOptions().setSsl(false).setPort(port))
                 .requestHandler(this::handleRequest)
                 .listen(port)
-                .onSuccess(res -> log.info("proxyHandler server started at port: {}", port))
+                .onSuccess(res -> log.info("reverse proxy server started at port: {}", res.actualPort()))
                 .onFailure(err -> log.error("error start proxyHandler server", err));
     }
 
