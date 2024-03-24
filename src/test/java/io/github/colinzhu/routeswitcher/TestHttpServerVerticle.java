@@ -36,14 +36,5 @@ public class TestHttpServerVerticle extends AbstractVerticle {
                 .onSuccess(res -> log.info("target server started at port: {}", port))
                 .onFailure(err -> log.error("error start target server", err));
 
-//        originServer.requestHandler(req -> {
-//            log.info("request:{}", req.uri());
-//            log.info("absoluteURI:{}", req.absoluteURI());
-//                    req.response()
-//                            .putHeader("content-type", "text/html")
-//                            .end("<html><body><h1> " + req.absoluteURI() + " I'm the target resource!</h1></body></html>");
-//                }).listen(port)
-//                .onSuccess(res -> log.info("target server started at port: {}", port))
-//                .onFailure(err -> log.error("error start target server", err));
     }
 }

@@ -1,0 +1,4 @@
+[ {
+  "uriPrefix" : "local",
+  "target" : "http://localhost:7070"
+} ]
