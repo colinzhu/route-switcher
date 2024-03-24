@@ -11,7 +11,7 @@ import java.nio.file.Path;
 
 @Slf4j
 public class App {
-    private static final String APP_CONFIG_FILE = "configX.json";
+    private static final String APP_CONFIG_FILE = "config.json";
 
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
