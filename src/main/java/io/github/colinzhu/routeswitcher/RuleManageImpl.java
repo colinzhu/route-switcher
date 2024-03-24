@@ -15,11 +15,12 @@ import java.util.Set;
 @Slf4j
 public class RuleManageImpl implements RuleManager {
     private Set<Rule> rules = new HashSet<>();
+    private static final String configFileName = "rules.json";
 
     @Override
     public void loadRules() {
         try {
-            String rulesStr = Files.readString(Path.of("rules.json"));
+            String rulesStr = Files.readString(Path.of(configFileName));
             JsonArray array = new JsonArray(rulesStr);
             array.forEach(entry -> rules.add(((JsonObject)entry).mapTo(Rule.class)));
         } catch (IOException e) {
@@ -30,7 +31,7 @@ public class RuleManageImpl implements RuleManager {
     @Override
     public void persistRules() {
         try {
-            Files.writeString(Path.of("rules.json"), new JsonArray(rules.stream().toList()).encodePrettily());
+            Files.writeString(Path.of(configFileName), new JsonArray(rules.stream().toList()).encodePrettily());
         } catch (IOException e) {
             log.error("fail to save rules to file", e);
             throw new RuntimeException(e);
@@ -41,7 +42,10 @@ public class RuleManageImpl implements RuleManager {
     public void addOrUpdate(Rule rule) {
         rules.remove(rule);
         rules.add(rule);
-
     }
 
+    @Override
+    public void deleteRule(Rule rule) {
+        rules.remove(rule);
+    }
 }

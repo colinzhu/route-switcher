@@ -7,5 +7,6 @@ public interface RuleManager {
     void loadRules();
     void persistRules();
     void addOrUpdate(Rule rule);
+    void deleteRule(Rule rule);
 
 }

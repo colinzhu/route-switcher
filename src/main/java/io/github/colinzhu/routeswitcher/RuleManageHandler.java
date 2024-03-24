@@ -21,6 +21,7 @@ public class RuleManageHandler {
         Router router = Router.router(vertx);
         router.route(HttpMethod.GET, "/api/rules").handler(this::getRules);
         router.route(HttpMethod.POST, "/api/rules").handler(this::addOrUpdateOneRule);
+        router.route(HttpMethod.DELETE, "/api/rules").handler(this::deleteOneRule);
         return router;
     }
 
@@ -33,14 +34,32 @@ public class RuleManageHandler {
 
     private void addOrUpdateOneRule(RoutingContext routingContext) {
         log.info("update one rule request body:{}", routingContext.body().asString());
-        Rule rule = routingContext.body().asPojo(Rule.class);
 
-        ruleManager.addOrUpdate(rule);
-        ruleManager.persistRules();
+        try {
+            Rule rule = routingContext.body().asPojo(Rule.class);
 
-        Future.succeededFuture()
-                .onSuccess(res -> routingContext.json(ruleManager.getRules()))
-                .onFailure(err -> routingContext.response().setStatusCode(500).end(Json.encode(Map.of("reason", "error"))));
+            ruleManager.addOrUpdate(rule);
+            ruleManager.persistRules();
+
+            routingContext.json(ruleManager.getRules());
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).end(Json.encode(Map.of("reason", e.getMessage())));
+        }
+    }
+
+    private void deleteOneRule(RoutingContext routingContext) {
+        log.info("delete one rule request body:{}", routingContext.body().asString());
+
+        try {
+            Rule rule = routingContext.body().asPojo(Rule.class);
+
+            ruleManager.deleteRule(rule);
+            ruleManager.persistRules();
+
+            routingContext.json(ruleManager.getRules());
+        } catch (Exception e) {
+            routingContext.response().setStatusCode(500).end(Json.encode(Map.of("reason", e.getMessage())));
+        }
     }
 
 }

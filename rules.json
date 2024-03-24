@@ -2,9 +2,6 @@
   "uriPrefix" : "test",
   "target" : "http://localhost:2070"
 }, {
-  "uriPrefix" : "test2",
-  "target" : "http://localhost:3070"
-}, {
   "uriPrefix" : "local",
   "target" : "http://localhost:7070"
 } ]
