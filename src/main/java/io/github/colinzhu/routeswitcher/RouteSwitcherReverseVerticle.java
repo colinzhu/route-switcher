@@ -47,7 +47,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
 
     private void handleRequest(HttpServerRequest request) {
         String uri = request.uri();
-        var firstMatchedRule = ruleManager.getRules().stream().filter(entry -> uri.startsWith("/" + entry.getUriPrefix())).findFirst();
+        var firstMatchedRule = ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst();
 
         if (firstMatchedRule.isEmpty()) {
             defaultRequestHandler.handle(request);
@@ -71,7 +71,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
 
     private Future<SocketAddress> selectOrigin(HttpServerRequest request) {
         String uri = request.uri();
-        return ruleManager.getRules().stream().filter(entry -> uri.startsWith("/" + entry.getUriPrefix())).findFirst()
+        return ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst()
                 .map(entry -> {
                     log.info("{} ==> {}", request.absoluteURI(), entry.getTarget() + uri);
                     return Future.succeededFuture(getTargetSocketAddress(entry.getTarget()));

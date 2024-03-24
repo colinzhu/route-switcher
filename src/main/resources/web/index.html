@@ -48,8 +48,8 @@
         <tbody>
         <template x-for="item in records">
             <tr>
-                <td x-text="'/' + item.uriPrefix"></td>
-                <td x-html="'<mark>' + item.target + '</mark>' + '/' + item.uriPrefix"></td>
+                <td x-text="item.uriPrefix"></td>
+                <td x-html="'<mark>' + item.target + '</mark>' + item.uriPrefix"></td>
                 <td class="no-underline">
                     <a href="#" @click.prevent="$dispatch('updaterecord', { uriPrefix: item.uriPrefix, target: item.target })">📝</a>
                     <a href="#" @click.prevent="deleteRecord(item.uriPrefix, item.target)">❎</a>
@@ -70,7 +70,7 @@
         </header>
         <form method="post" @submit.prevent="submit" id="recordEditForm">
             <label>uriPrefix<input type="text" x-model="uriPrefix" required x-bind:disabled="isSubmitting" /></label>
-            <label>target<input type="text" x-model="target" x-bind:disabled="isSubmitting" size="100" /></label>
+            <label>target (e.g. http://example.com:1234)<input type="text" x-model="target" x-bind:disabled="isSubmitting" /></label>
             <button x-bind:disabled="isSubmitting" x-bind:aria-busy="isSubmitting">Submit</button>
             <button x-bind:disabled="isSubmitting" @click="cancel" type="reset">Cancel</button>
         </form>
