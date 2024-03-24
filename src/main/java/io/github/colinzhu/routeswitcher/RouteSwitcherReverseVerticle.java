@@ -48,14 +48,14 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
 
     private void handleRequest(HttpServerRequest request) {
         String uri = request.uri();
-        var firstMatchedRule = ruleManager.getRules().entrySet().stream().filter(entry -> uri.startsWith("/" + entry.getKey())).findFirst();
+        var firstMatchedRule = ruleManager.getRules().stream().filter(entry -> uri.startsWith("/" + entry.getUriPrefix())).findFirst();
 
         if (firstMatchedRule.isEmpty()) {
             defaultRequestHandler.handle(request);
             return;
         }
 
-        String targetServer = firstMatchedRule.get().getValue();
+        String targetServer = firstMatchedRule.get().getTarget();
         if (targetServer.startsWith("https")) {
             httpsProxy.handle(request);
         } else {
@@ -72,10 +72,10 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
 
     private Future<SocketAddress> selectOrigin(HttpServerRequest request) {
         String uri = request.uri();
-        return ruleManager.getRules().entrySet().stream().filter(entry -> uri.startsWith("/" + entry.getKey())).findFirst()
+        return ruleManager.getRules().stream().filter(entry -> uri.startsWith("/" + entry.getUriPrefix())).findFirst()
                 .map(entry -> {
-                    log.info("{} ==> {}", request.absoluteURI(), entry.getValue() + uri);
-                    return Future.succeededFuture(getTargetSocketAddress(entry.getValue()));
+                    log.info("{} ==> {}", request.absoluteURI(), entry.getTarget() + uri);
+                    return Future.succeededFuture(getTargetSocketAddress(entry.getTarget()));
                 })
                 .orElse(Future.failedFuture("No matching rule found for URI: " + uri));
     }

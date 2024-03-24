@@ -1,9 +1,11 @@
 package io.github.colinzhu.routeswitcher;
 
-import java.util.Map;
+import java.util.Set;
 
 public interface RuleManager {
-    Map<String, String> getRules();
+    Set<Rule> getRules();
     void loadRules();
     void persistRules();
+    void addOrUpdate(Rule rule);
+
 }
