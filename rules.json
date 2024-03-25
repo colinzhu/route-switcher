@@ -1,11 +1,16 @@
 [ {
+  "uriPrefix" : "/get",
+  "target" : "https://httpbin.org",
+  "user" : "",
+  "updateTime" : 1711378889904
+}, {
   "uriPrefix" : "/local",
   "target" : "http://localhost:7070",
   "user" : "",
-  "updateTime" : 1711353481988
+  "updateTime" : 1711378892919
 }, {
-  "uriPrefix" : "/test",
-  "target" : "http://example.com:1234",
+  "uriPrefix" : "/post",
+  "target" : "https://httpbin.org",
   "user" : "",
-  "updateTime" : 1711353691971
+  "updateTime" : 1711378895848
 } ]

@@ -73,7 +73,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
         return client
                 .request(new RequestOptions().setServer(getTargetSocketAddress(targetServer)))
                 .onSuccess(clientRequest -> clientRequest.response()
-                        .onSuccess(response -> log.info("{} ===> {} ({})", serverRequest.absoluteURI(), targetServer + serverRequest.uri(), response.statusCode()))
+                        .onSuccess(response -> log.info("{} {} ===> {} ({})", serverRequest.method(), serverRequest.absoluteURI(), targetServer + serverRequest.uri(), response.statusCode()))
                         .onFailure(err -> log.error("error response from target server", err)))
                 .onFailure(err -> log.error("{} ===> {} (error)", serverRequest.absoluteURI(), targetServer + serverRequest.uri(), err));
     }
