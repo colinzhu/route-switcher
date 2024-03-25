@@ -1,5 +1,7 @@
 # Route Switcher
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 Route Switcher is a reverse proxy server application developed using Java and Vert.x. 
 It is designed to route the network traffic to different destinations based on the specified routing rules.
 
