@@ -10,7 +10,7 @@ const recordListData = {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         this.records = await response.json();
-        console.log("records loaded", this.records);
+//        console.log("records loaded", this.records);
     },
     async deleteRecord(uriPrefix, target) {
         if (!confirm("[" + uriPrefix + "] confirm delete this rule?")) return;
@@ -89,8 +89,19 @@ const recordFormData = {
     }
 };
 
+function initWebConsole() {
+    const protocol = location.protocol == "https:" ? "wss:" : "ws:";
+    const socket = new WebSocket(protocol + "//" + location.host);
+    socket.onmessage = event => {
+        const message = document.createElement("div");
+        message.textContent = event.data;
+        document.getElementById("messages").appendChild(message);
+    }
+}
+
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('recordListData', () => recordListData)
     Alpine.data('recordFormData', () => recordFormData)
+    initWebConsole();
 })
