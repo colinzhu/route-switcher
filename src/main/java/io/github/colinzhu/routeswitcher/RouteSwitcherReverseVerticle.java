@@ -33,7 +33,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
                 .requestHandler(this::handleRequest)
                 .listen(port)
                 .onSuccess(res -> log.info("reverse proxy server started at port: {}", res.actualPort()))
-                .onFailure(err -> log.error("error start proxyHandler server", err));
+                .onFailure(err -> log.error("error start reverse proxy server", err));
     }
 
     private Router prepareDefaultRequestHandler() {
