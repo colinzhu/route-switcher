@@ -13,11 +13,11 @@ import java.util.Set;
 
 @Data
 @Slf4j
-class RuleManageImpl implements RuleManager {
+class RuleManagerFileStoreImpl implements RuleManager {
     private Set<Rule> rules = new HashSet<>();
     private static final String RULES_FILE_NAME = "rules.json";
 
-    public RuleManageImpl() {
+    public RuleManagerFileStoreImpl() {
         loadRules();
     }
 

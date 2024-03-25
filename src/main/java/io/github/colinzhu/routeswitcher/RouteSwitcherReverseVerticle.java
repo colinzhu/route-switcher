@@ -19,7 +19,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
     private HttpProxy httpsProxy;
     private Router defaultRequestHandler;
 
-    private final RuleManager ruleManager = new RuleManageImpl();
+    private final RuleManager ruleManager = new RuleManagerFileStoreImpl();
 
     @Override
     public void start() {
