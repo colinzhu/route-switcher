@@ -9,12 +9,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.7/dist/cdn.min.js"></script>
     <script src="main.js"></script>
     <style>
-        .grid3 {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-          gap: 1rem;
-        }
-
         .no-underline a {
           text-decoration: none
         }
@@ -30,7 +24,7 @@
             </li>
         </ul>
         <ul>
-            <li><button role="button" @click="$dispatch('addrecord')">Add</button></li>
+            <li><button role="button" @click="$dispatch('addrecord')">Add Rule</button></li>
         </ul>
     </nav>
 </div>
@@ -77,6 +71,7 @@
     </article>
 </dialog>
 
+<div style="padding:1rem;font-size:0.8rem"><pre id="messages" style="white-space:pre-wrap"></pre></div>
 </body>
 
 </html>

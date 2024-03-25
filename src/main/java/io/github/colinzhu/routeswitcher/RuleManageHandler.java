@@ -26,14 +26,14 @@ class RuleManageHandler {
     }
 
     private void getRules(RoutingContext routingContext) {
-        log.info("get rules request body:{}", routingContext.body().asString());
+        log.debug("get rules request body:{}", routingContext.body().asString());
         Future.succeededFuture()
                 .onSuccess(res -> routingContext.json(ruleManager.getRules()))
                 .onFailure(err -> routingContext.response().setStatusCode(500).end(Json.encode(Map.of("reason", "error"))));
     }
 
     private void addOrUpdateOneRule(RoutingContext routingContext) {
-        log.info("update one rule request body:{}", routingContext.body().asString());
+        log.debug("update one rule request body:{}", routingContext.body().asString());
 
         try {
             Rule rule = routingContext.body().asPojo(Rule.class);
@@ -45,7 +45,7 @@ class RuleManageHandler {
     }
 
     private void deleteOneRule(RoutingContext routingContext) {
-        log.info("delete one rule request body:{}", routingContext.body().asString());
+        log.debug("delete one rule request body:{}", routingContext.body().asString());
 
         try {
             Rule rule = routingContext.body().asPojo(Rule.class);

@@ -2,10 +2,7 @@ package io.github.colinzhu.routeswitcher;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.*;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -14,6 +11,7 @@ import io.vertx.httpproxy.HttpProxy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.util.Optional;
 
 @Slf4j
 public class RouteSwitcherReverseVerticle extends AbstractVerticle {
@@ -31,6 +29,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
         defaultRequestHandler = prepareDefaultRequestHandler();
 
         vertx.createHttpServer(new HttpServerOptions().setSsl(false).setPort(port))
+                .webSocketHandler(new WebSocketHandler(vertx))
                 .requestHandler(this::handleRequest)
                 .listen(port)
                 .onSuccess(res -> log.info("reverse proxy server started at port: {}", res.actualPort()))
@@ -46,9 +45,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
     }
 
     private void handleRequest(HttpServerRequest request) {
-        String uri = request.uri();
-        var firstMatchedRule = ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst();
-
+        var firstMatchedRule = getFirstMatchedRule(request);
         if (firstMatchedRule.isEmpty()) {
             defaultRequestHandler.handle(request);
             return;
@@ -65,18 +62,25 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
     private HttpProxy prepareHttpProxy(boolean isSsl) {
         HttpClient httpClient = vertx.createHttpClient(new HttpClientOptions().setSsl(isSsl));
         HttpProxy httpProxy = HttpProxy.reverseProxy(httpClient);
-        httpProxy.originSelector(this::selectOrigin);
+        httpProxy.originRequestProvider(this::prepareTargetRequest);
         return httpProxy;
     }
 
-    private Future<SocketAddress> selectOrigin(HttpServerRequest request) {
-        String uri = request.uri();
-        return ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst()
-                .map(entry -> {
-                    log.info("{} ==> {}", request.absoluteURI(), entry.getTarget() + uri);
-                    return Future.succeededFuture(getTargetSocketAddress(entry.getTarget()));
-                })
-                .orElse(Future.failedFuture("No matching rule found for URI: " + uri));
+    private Future<HttpClientRequest> prepareTargetRequest(HttpServerRequest serverRequest, HttpClient client) {
+        var firstMatchedRule = getFirstMatchedRule(serverRequest);
+        String targetServer = firstMatchedRule.get().getTarget();
+
+        return client
+                .request(new RequestOptions().setServer(getTargetSocketAddress(targetServer)))
+                .onSuccess(clientRequest -> clientRequest.response()
+                        .onSuccess(response -> log.info("{} ===> {} ({})", serverRequest.absoluteURI(), targetServer + serverRequest.uri(), response.statusCode()))
+                        .onFailure(err -> log.error("error response from target server", err)))
+                .onFailure(err -> log.error("{} ===> {} (error)", serverRequest.absoluteURI(), targetServer + serverRequest.uri(), err));
+    }
+
+    private Optional<Rule> getFirstMatchedRule(HttpServerRequest serverRequest) {
+        String uri = serverRequest.uri();
+        return ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst();
     }
 
     private SocketAddress getTargetSocketAddress(String targetServer) {
