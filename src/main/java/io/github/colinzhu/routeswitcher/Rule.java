@@ -8,6 +8,8 @@ import java.util.Objects;
 class Rule {
     private String uriPrefix;
     private String target;
+    private String user;
+    private Long updateTime;
 
     @Override
     public boolean equals(Object o) {

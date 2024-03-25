@@ -36,6 +36,8 @@
         <tr>
             <th scope="col">uriPrefix</th>
             <th scope="col">target</th>
+            <th scope="col">user</th>
+            <th scope="col">updateTime</th>
             <th scope="col">action</th>
         </tr>
         </thead>
@@ -44,6 +46,8 @@
             <tr>
                 <td x-text="item.uriPrefix"></td>
                 <td x-html="'<mark>' + item.target + '</mark>' + item.uriPrefix"></td>
+                <td x-text="item.user"></td>
+                <td x-html="new Date(item.updateTime).toLocaleString()"></td>
                 <td class="no-underline">
                     <a href="#" @click.prevent="$dispatch('updaterecord', { uriPrefix: item.uriPrefix, target: item.target })">📝</a>
                     <a href="#" @click.prevent="deleteRecord(item.uriPrefix, item.target)">❎</a>

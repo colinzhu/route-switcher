@@ -28,6 +28,8 @@ class RuleManageImpl implements RuleManager {
             array.forEach(entry -> rules.add(((JsonObject)entry).mapTo(Rule.class)));
         } catch (IOException e) {
             log.warn("no rules.json file found, use empty rules", e);
+        } catch (RuntimeException e) {
+            log.error("fail to load rules from file", e);
         }
     }
 
