@@ -1,4 +1,11 @@
 [ {
   "uriPrefix" : "/local",
-  "target" : "http://localhost:7070"
+  "target" : "http://localhost:7070",
+  "user" : "",
+  "updateTime" : 1711353481988
+}, {
+  "uriPrefix" : "/test",
+  "target" : "http://example.com:1234",
+  "user" : "",
+  "updateTime" : 1711353691971
 } ]

@@ -1,9 +1,5 @@
 const recordListData = {
     records: [],
-    formatDate(date) {
-        console.log("date:", date);
-        return new Date(date.replace('-','/')).toLocaleString('zh-CN', { timeZone: 'Asia/Singapore', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-    },
     async loadRecords() {
         const response = await fetch('/rule-manage/api/rules');
         if (!response.ok) {
@@ -31,6 +27,8 @@ const recordFormData = {
     editMode: '',
     uriPrefix: '',
     target: '',
+    user: '',
+    updateTime: null,
     isSubmitting: false,
     isEditing: false,
     toggleEditForm() {
@@ -53,7 +51,9 @@ const recordFormData = {
             this.isSubmitting = true;
             const recordData = {
                 uriPrefix: this.uriPrefix,
-                target: this.target
+                target: this.target,
+                user: this.user,
+                updateTime: new Date().getTime(), // current milliseconds timestamp
             };
             console.log("recordData:", recordData);
             try {
