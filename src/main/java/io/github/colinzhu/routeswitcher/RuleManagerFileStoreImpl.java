@@ -1,5 +1,6 @@
 package io.github.colinzhu.routeswitcher;
 
+import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import lombok.Data;
@@ -13,11 +14,11 @@ import java.util.Set;
 
 @Data
 @Slf4j
-class RuleManageImpl implements RuleManager {
+class RuleManagerFileStoreImpl implements RuleManager {
     private Set<Rule> rules = new HashSet<>();
     private static final String RULES_FILE_NAME = "rules.json";
 
-    public RuleManageImpl() {
+    public RuleManagerFileStoreImpl() {
         loadRules();
     }
 
@@ -43,15 +44,17 @@ class RuleManageImpl implements RuleManager {
     }
 
     @Override
-    public void addOrUpdate(Rule rule) {
+    public Future<Void> addOrUpdate(Rule rule) {
         rules.remove(rule);
         rules.add(rule);
         persistRules();
+        return Future.succeededFuture();
     }
 
     @Override
-    public void delete(Rule rule) {
+    public Future<Void> delete(Rule rule) {
         rules.remove(rule);
         persistRules();
+        return Future.succeededFuture();
     }
 }

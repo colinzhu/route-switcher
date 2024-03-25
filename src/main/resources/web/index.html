@@ -67,8 +67,12 @@
             <h3>Add / Update</h3>
         </header>
         <form method="post" @submit.prevent="submit" id="recordEditForm">
-            <label>uriPrefix<input type="text" x-model="uriPrefix" required x-bind:disabled="isSubmitting" /></label>
-            <label>target (e.g. http://example.com:1234)<input type="text" x-model="target" x-bind:disabled="isSubmitting" /></label>
+            <label>uriPrefix (e.g. /api/v1)
+                <input type="text" x-model="uriPrefix" required x-bind:disabled="isSubmitting || editMode == 'update'" pattern="^/.*$"/>
+            </label>
+            <label>target (Host and port only. e.g. http://example.com:1234)
+                <input type="text" x-model="target" x-bind:disabled="isSubmitting" required pattern="https?:\/\/[\w.\-]+(:\d{1,5})?$" />
+            </label>
             <button x-bind:disabled="isSubmitting" x-bind:aria-busy="isSubmitting">Submit</button>
             <button x-bind:disabled="isSubmitting" @click="cancel" type="reset">Cancel</button>
         </form>
