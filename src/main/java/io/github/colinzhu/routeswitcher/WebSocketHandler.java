@@ -20,7 +20,7 @@ class WebSocketHandler implements Handler<ServerWebSocket> {
 
     public void handle(ServerWebSocket webSocket) {
         log.info("web socket connected");
-        webSocket.writeTextMessage("Welcome to Route Switcher!");
+        webSocket.writeTextMessage("Welcome to the Route Switcher. For historical log information, please refer to the 'route-switcher.log' file.");
         vertx.eventBus().consumer("console.log", message -> {
             webSocket.writeTextMessage((String) message.body()); // redirect the message to websocket (web)
         });
