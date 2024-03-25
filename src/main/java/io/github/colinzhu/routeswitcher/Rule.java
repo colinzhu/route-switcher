@@ -10,6 +10,7 @@ class Rule {
     private String target;
     private String user;
     private Long updateTime;
+    private String remark;
 
     @Override
     public boolean equals(Object o) {

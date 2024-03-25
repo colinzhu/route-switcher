@@ -38,6 +38,7 @@
             <th scope="col">target</th>
             <th scope="col">user</th>
             <th scope="col">updateTime</th>
+            <th scope="col">remark</th>
             <th scope="col">action</th>
         </tr>
         </thead>
@@ -48,8 +49,9 @@
                 <td x-html="'<mark>' + item.target + '</mark>' + item.uriPrefix"></td>
                 <td x-text="item.user"></td>
                 <td x-html="new Date(item.updateTime).toLocaleString()"></td>
+                <td x-text="item.remark"></td>
                 <td class="no-underline">
-                    <a href="#" @click.prevent="$dispatch('updaterecord', { uriPrefix: item.uriPrefix, target: item.target })">📝</a>
+                    <a href="#" @click.prevent="$dispatch('updaterecord', { uriPrefix: item.uriPrefix, target: item.target, remark: item.remark})">📝</a>
                     <a href="#" @click.prevent="deleteRecord(item.uriPrefix, item.target)">❎</a>
                 </td>
             </tr>
@@ -72,6 +74,9 @@
             </label>
             <label>target (Host and port only. e.g. http://example.com:1234)
                 <input type="text" x-model="target" x-bind:disabled="isSubmitting" required pattern="https?:\/\/[\w.\-]+(:\d{1,5})?$" />
+            </label>
+            <label>remark
+                <input type="text" x-model="remark" x-bind:disabled="isSubmitting" />
             </label>
             <button x-bind:disabled="isSubmitting" x-bind:aria-busy="isSubmitting">Submit</button>
             <button x-bind:disabled="isSubmitting" @click="cancel" type="reset">Cancel</button>

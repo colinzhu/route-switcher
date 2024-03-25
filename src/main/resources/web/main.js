@@ -29,6 +29,7 @@ const recordFormData = {
     target: '',
     user: '',
     updateTime: null,
+    remark: '',
     isSubmitting: false,
     isEditing: false,
     toggleEditForm() {
@@ -39,11 +40,12 @@ const recordFormData = {
         this.editMode = 'create';
         this.toggleEditForm();
     },
-    loadItemToUpdate({uriPrefix, target}) {
+    loadItemToUpdate({uriPrefix, target, remark}) {
         this.resetForm();
         this.editMode = 'update'
         this.uriPrefix = uriPrefix;
         this.target = target;
+        this.remark = remark
         this.toggleEditForm();
     },
     async submit() {
@@ -54,6 +56,7 @@ const recordFormData = {
                 target: this.target,
                 user: this.user,
                 updateTime: new Date().getTime(), // current milliseconds timestamp
+                remark: this.remark,
             };
             console.log("recordData:", recordData);
             try {
@@ -82,6 +85,7 @@ const recordFormData = {
         document.getElementById('recordEditForm').reset();
         this.uriPrefix = '';
         this.target = '';
+        this.remark = '';
     },
     cancel() {
         this.resetForm();
