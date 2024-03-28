@@ -82,9 +82,19 @@
 <!--                <input type="text" x-model="fromIP" x-bind:disabled="isSubmitting" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"/>-->
                 <input type="text" x-model="fromIP" x-bind:disabled="isSubmitting" />
             </label>
-            <label>* target (Host and port only. e.g. http://example.com:1234)
-                <input type="text" x-model="target" x-bind:disabled="isSubmitting" required pattern="https?:\/\/[\w.\-]+(:\d{1,5})?$" />
+            <label>* target options split by comma (e.g. http://aaa.com:1234,https://bbb.com)
+                <input type="text" x-model="targetOptions" x-bind:disabled="isSubmitting" required />
             </label>
+            <label x-show="targetOptions">* target (Host and port only. e.g. http://example.com:1234)
+                <select x-model="target" x-bind:disabled="isSubmitting" required>
+                    <template x-for="option in [...new Set(targetOptions.split(','))]" :key="option">
+                        <option x-text="option" x-bind:value="option"></option>
+                    </template>
+                </select>
+            </label>
+<!--            <label x-show="!targetOptions || targetOptions.split(',').length < 1">* target (Host and port only. e.g. http://example.com:1234)-->
+<!--                <input type="text" x-model="target" x-bind:disabled="isSubmitting" required pattern="https?:\/\/[\w.\-]+(:\d{1,5})?$" />-->
+<!--            </label>-->
             <label>* updateBy
                 <input type="text" x-model="updateBy" x-bind:disabled="isSubmitting" required />
             </label>

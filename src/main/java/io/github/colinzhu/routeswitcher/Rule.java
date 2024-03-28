@@ -10,6 +10,7 @@ import java.util.Objects;
 class Rule {
     private String uriPrefix;
     private String fromIP;
+    private String targetOptions;
     private String target;
     private String updateBy;
     private Long updateTime;
