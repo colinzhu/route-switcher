@@ -1,15 +1,17 @@
 package io.github.colinzhu.routeswitcher;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.util.Objects;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Rule {
     private String uriPrefix;
     private String fromIP;
     private String target;
-    private String user;
+    private String updateBy;
     private Long updateTime;
     private String remark;
 

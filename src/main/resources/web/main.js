@@ -32,7 +32,7 @@ const recordFormData = {
     uriPrefix: '',
     fromIP: '',
     target: '',
-    user: '',
+    updateBy: '',
     updateTime: null,
     remark: '',
     isSubmitting: false,
@@ -61,7 +61,7 @@ const recordFormData = {
                 uriPrefix: this.uriPrefix,
                 fromIP: this.fromIP,
                 target: this.target,
-                user: this.user,
+                updateBy: this.updateBy,
                 updateTime: new Date().getTime(), // current milliseconds timestamp
                 remark: this.remark,
             };
@@ -93,6 +93,7 @@ const recordFormData = {
         this.uriPrefix = '';
         this.fromIP = '';
         this.target = '';
+        this.updateBy = '';
         this.remark = '';
     },
     cancel() {

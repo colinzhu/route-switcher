@@ -41,7 +41,7 @@
             <th scope="col">uriPrefix</th>
             <th scope="col">fromIP</th>
             <th scope="col">target</th>
-            <th scope="col">user</th>
+            <th scope="col">updateBy</th>
             <th scope="col">updateTime</th>
             <th scope="col">remark</th>
             <th scope="col">action</th>
@@ -53,7 +53,7 @@
                 <td x-text="item.uriPrefix"></td>
                 <td x-text="item.fromIP"></td>
                 <td x-text="item.target"></td>
-                <td x-text="item.user"></td>
+                <td x-text="item.updateBy"></td>
                 <td x-html="new Date(item.updateTime).toLocaleString()"></td>
                 <td x-text="item.remark"></td>
                 <td class="no-underline">
@@ -75,15 +75,18 @@
             <h3>Add / Update</h3>
         </header>
         <form method="post" @submit.prevent="submit" id="recordEditForm">
-            <label>uriPrefix (e.g. /api/v1)
+            <label>* uriPrefix (e.g. /api/v1)
                 <input type="text" x-model="uriPrefix" required x-bind:disabled="isSubmitting" pattern="^/.*$"/>
             </label>
             <label>fromIP (e.g. 123.222.222.223)
 <!--                <input type="text" x-model="fromIP" x-bind:disabled="isSubmitting" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"/>-->
                 <input type="text" x-model="fromIP" x-bind:disabled="isSubmitting" />
             </label>
-            <label>target (Host and port only. e.g. http://example.com:1234)
+            <label>* target (Host and port only. e.g. http://example.com:1234)
                 <input type="text" x-model="target" x-bind:disabled="isSubmitting" required pattern="https?:\/\/[\w.\-]+(:\d{1,5})?$" />
+            </label>
+            <label>* updateBy
+                <input type="text" x-model="updateBy" x-bind:disabled="isSubmitting" required />
             </label>
             <label>remark
                 <input type="text" x-model="remark" x-bind:disabled="isSubmitting" />

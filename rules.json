@@ -2,28 +2,21 @@
   "uriPrefix" : "/get",
   "fromIP" : "",
   "target" : "https://httpbin.org",
-  "user" : "",
-  "updateTime" : 1711638954356,
+  "updateBy" : "colin",
+  "updateTime" : 1711640305788,
   "remark" : ""
-}, {
-  "uriPrefix" : "/local",
-  "fromIP" : "",
-  "target" : "http://localhost:7070",
-  "user" : "",
-  "updateTime" : 1711378892919,
-  "remark" : null
 }, {
   "uriPrefix" : "/post",
   "fromIP" : "",
   "target" : "https://httpbin.org",
-  "user" : "",
+  "updateBy" : null,
   "updateTime" : 1711378895848,
   "remark" : null
 }, {
   "uriPrefix" : "/get",
   "fromIP" : "0:0:0:0:0:0:0:1",
   "target" : "http://httpbin.org",
-  "user" : "",
+  "updateBy" : null,
   "updateTime" : 1711639138926,
   "remark" : ""
 } ]
