@@ -5,12 +5,16 @@ const recordListData = {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        this.records = await response.json();
+        const records = await response.json();
+        this.records = records.sort((a, b) => {
+            return a.uriPrefix.localeCompare(b.uriPrefix) || a.fromIP.localeCompare(b.fromIP)
+        });
+
 //        console.log("records loaded", this.records);
     },
-    async deleteRecord(uriPrefix, target) {
+    async deleteRecord({uriPrefix, fromIP, target}) {
         if (!confirm("[" + uriPrefix + "] confirm delete this rule?")) return;
-        const rule = { uriPrefix, target };
+        const rule = { uriPrefix, fromIP, target };
         const response = await fetch('/rule-manage/api/rules', {
             method: 'DELETE',
             body: JSON.stringify(rule)
@@ -26,6 +30,7 @@ const recordListData = {
 const recordFormData = {
     editMode: '',
     uriPrefix: '',
+    fromIP: '',
     target: '',
     user: '',
     updateTime: null,
@@ -40,10 +45,11 @@ const recordFormData = {
         this.editMode = 'create';
         this.toggleEditForm();
     },
-    loadItemToUpdate({uriPrefix, target, remark}) {
+    loadItemToUpdate({uriPrefix, fromIP, target, remark}) {
         this.resetForm();
         this.editMode = 'update'
         this.uriPrefix = uriPrefix;
+        this.fromIP = fromIP;
         this.target = target;
         this.remark = remark
         this.toggleEditForm();
@@ -53,6 +59,7 @@ const recordFormData = {
             this.isSubmitting = true;
             const recordData = {
                 uriPrefix: this.uriPrefix,
+                fromIP: this.fromIP,
                 target: this.target,
                 user: this.user,
                 updateTime: new Date().getTime(), // current milliseconds timestamp
@@ -84,6 +91,7 @@ const recordFormData = {
     resetForm() {
         document.getElementById('recordEditForm').reset();
         this.uriPrefix = '';
+        this.fromIP = '';
         this.target = '';
         this.remark = '';
     },

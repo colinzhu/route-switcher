@@ -7,6 +7,7 @@ import java.util.Objects;
 @Data
 class Rule {
     private String uriPrefix;
+    private String fromIP;
     private String target;
     private String user;
     private Long updateTime;
@@ -17,11 +18,11 @@ class Rule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rule rule = (Rule) o;
-        return Objects.equals(uriPrefix, rule.uriPrefix);
+        return Objects.equals(uriPrefix, rule.uriPrefix) && Objects.equals(fromIP, rule.fromIP);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uriPrefix);
+        return Objects.hash(uriPrefix + fromIP);
     }
 }
