@@ -12,9 +12,9 @@ const recordListData = {
 
 //        console.log("records loaded", this.records);
     },
-    async deleteRecord({uriPrefix, fromIP, target}) {
+    async deleteRecord({uriPrefix, fromIP}) {
         if (!confirm("[" + uriPrefix + "] confirm delete this rule?")) return;
-        const rule = { uriPrefix, fromIP, target };
+        const rule = { uriPrefix, fromIP };
         const response = await fetch('/rule-manage/api/rules', {
             method: 'DELETE',
             body: JSON.stringify(rule)
@@ -31,6 +31,7 @@ const recordFormData = {
     editMode: '',
     uriPrefix: '',
     fromIP: '',
+    targetOptions: '',
     target: '',
     updateBy: '',
     updateTime: null,
@@ -45,11 +46,12 @@ const recordFormData = {
         this.editMode = 'create';
         this.toggleEditForm();
     },
-    loadItemToUpdate({uriPrefix, fromIP, target, remark}) {
+    loadItemToUpdate({uriPrefix, fromIP, targetOptions, target, remark}) {
         this.resetForm();
         this.editMode = 'update'
         this.uriPrefix = uriPrefix;
         this.fromIP = fromIP;
+        this.targetOptions = targetOptions;
         this.target = target;
         this.remark = remark
         this.toggleEditForm();
@@ -60,6 +62,7 @@ const recordFormData = {
             const recordData = {
                 uriPrefix: this.uriPrefix,
                 fromIP: this.fromIP,
+                targetOptions: this.targetOptions,
                 target: this.target,
                 updateBy: this.updateBy,
                 updateTime: new Date().getTime(), // current milliseconds timestamp
@@ -92,6 +95,7 @@ const recordFormData = {
         document.getElementById('recordEditForm').reset();
         this.uriPrefix = '';
         this.fromIP = '';
+        this.targetOptions = '';
         this.target = '';
         this.updateBy = '';
         this.remark = '';
