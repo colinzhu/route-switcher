@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 public class RouteSwitcherReverseVerticle extends AbstractVerticle {
@@ -40,6 +41,7 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
         defaultRequestHandler = Router.router(vertx);
         defaultRequestHandler.route().handler(StaticHandler.create("web"));
         defaultRequestHandler.route().handler(BodyHandler.create());
+        defaultRequestHandler.route("/route-switcher/*").handler(StaticHandler.create("./"));
         defaultRequestHandler.route("/rule-manage/*").subRouter(new RuleManageHandler(vertx, ruleManager).getHandler());
         return defaultRequestHandler;
     }
@@ -70,17 +72,29 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
         var firstMatchedRule = getFirstMatchedRule(serverRequest);
         String targetServer = firstMatchedRule.get().getTarget();
 
+        String uuid = UUID.randomUUID().toString().split("-")[4];
+        String fromIP = serverRequest.remoteAddress().host();
+        String method = serverRequest.method().name();
+        String targetUrl = targetServer + serverRequest.uri();
+        log.info("request:  {} [{}] [{}] [{}] => {}", uuid, serverRequest.uri(), fromIP, method, targetUrl);
+
         return client
                 .request(new RequestOptions().setServer(getTargetSocketAddress(targetServer)))
                 .onSuccess(clientRequest -> clientRequest.response()
-                        .onSuccess(response -> log.info("{} {} ===> {} ({})", serverRequest.method(), serverRequest.absoluteURI(), targetServer + serverRequest.uri(), response.statusCode()))
-                        .onFailure(err -> log.error("error response from target server", err)))
-                .onFailure(err -> log.error("{} ===> {} (error)", serverRequest.absoluteURI(), targetServer + serverRequest.uri(), err));
+                        .onSuccess(response -> log.info("response: {} [{}]", uuid, response.statusCode()))
+                        .onFailure(err -> log.error("error: {}", uuid, err)))
+                .onFailure(err -> log.error("error: {}", uuid, err));
     }
 
     private Optional<Rule> getFirstMatchedRule(HttpServerRequest serverRequest) {
         String uri = serverRequest.uri();
-        return ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst();
+        String fromIP = serverRequest.remoteAddress().host();
+        Optional<Rule> matchIpAndUriPrefix = ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix()) && fromIP.equals(entry.getFromIP())).findFirst();
+        if (matchIpAndUriPrefix.isPresent()) {
+            return matchIpAndUriPrefix;
+        } else { // only match uri prefix, as a fallback (default)
+            return ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst();
+        }
     }
 
     private SocketAddress getTargetSocketAddress(String targetServer) {
