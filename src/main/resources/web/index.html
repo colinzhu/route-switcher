@@ -12,6 +12,12 @@
         .no-underline a {
           text-decoration: none
         }
+        dialog article {
+            max-width: 1000px;
+        }
+        :root {
+            --pico-font-size: 100%;
+        }
     </style>
 </head>
 
@@ -78,23 +84,20 @@
             <label>* uriPrefix (e.g. /api/v1)
                 <input type="text" x-model="uriPrefix" required x-bind:disabled="isSubmitting" pattern="^/.*$"/>
             </label>
-            <label>fromIP (e.g. 123.222.222.223)
-<!--                <input type="text" x-model="fromIP" x-bind:disabled="isSubmitting" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"/>-->
-                <input type="text" x-model="fromIP" x-bind:disabled="isSubmitting" />
+            <label>fromIP (e.g. 1.1.1.1,2.2.2.2)
+                <input type="text" x-model="fromIP" x-bind:disabled="isSubmitting" pattern="^(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?),)*((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"/>
             </label>
             <label>* target options split by comma (e.g. http://aaa.com:1234,https://bbb.com)
                 <input type="text" x-model="targetOptions" x-bind:disabled="isSubmitting" required />
             </label>
             <label x-show="targetOptions">* target (Host and port only. e.g. http://example.com:1234)
-                <select x-model="target" x-bind:disabled="isSubmitting" required>
+                <select x-model="target" x-bind:disabled="isSubmitting" required pattern="(https?:\/\/[\w.\-]+(:\d{1,5})?,)*https?:\/\/[\w.\-]+(:\d{1,5})?$">
+                    <option value="">Please select</option>
                     <template x-for="option in [...new Set(targetOptions.split(','))]" :key="option">
-                        <option x-text="option" x-bind:value="option"></option>
+                        <option x-text="option" x-bind:value="option.trim()"></option>
                     </template>
                 </select>
             </label>
-<!--            <label x-show="!targetOptions || targetOptions.split(',').length < 1">* target (Host and port only. e.g. http://example.com:1234)-->
-<!--                <input type="text" x-model="target" x-bind:disabled="isSubmitting" required pattern="https?:\/\/[\w.\-]+(:\d{1,5})?$" />-->
-<!--            </label>-->
             <label>* updateBy
                 <input type="text" x-model="updateBy" x-bind:disabled="isSubmitting" required />
             </label>
