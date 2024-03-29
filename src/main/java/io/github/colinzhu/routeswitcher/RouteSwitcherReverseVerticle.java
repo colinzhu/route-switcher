@@ -11,6 +11,7 @@ import io.vertx.httpproxy.HttpProxy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -89,11 +90,15 @@ public class RouteSwitcherReverseVerticle extends AbstractVerticle {
     private Optional<Rule> getFirstMatchedRule(HttpServerRequest serverRequest) {
         String uri = serverRequest.uri();
         String fromIP = serverRequest.remoteAddress().host();
-        Optional<Rule> matchIpAndUriPrefix = ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix()) && fromIP.equals(entry.getFromIP())).findFirst();
+        Optional<Rule> matchIpAndUriPrefix = ruleManager.getRules().stream()
+                .filter(entry -> uri.startsWith(entry.getUriPrefix()) && Arrays.stream(entry.getFromIP().split(",")).toList().contains(fromIP))
+                .findFirst();
         if (matchIpAndUriPrefix.isPresent()) {
             return matchIpAndUriPrefix;
         } else { // only match uri prefix, as a fallback (default)
-            return ruleManager.getRules().stream().filter(entry -> uri.startsWith(entry.getUriPrefix())).findFirst();
+            return ruleManager.getRules().stream()
+                    .filter(entry -> uri.startsWith(entry.getUriPrefix()) && entry.getFromIP().isEmpty())
+                    .findFirst();
         }
     }
 
